@@ -1,24 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  /* Paleta Satiro Consultoria */
+  /* * ========================================
+   * PALETA OFICIAL SATIRO CONSULTORIA
+   * ======================================== 
+   */
+   
+  /* Cores Base da Marca */
+  --brand-dark: #141434; /* Azul Oficial da Empresa */
+  --primary: #C28954;    /* Marrom Oficial da Empresa */
+  
+  /* Variações do Marrom (Primary) */
+  --primary-dim: rgba(194, 137, 84, 0.1);    /* Fundo para badges/hover */
+  --primary-border: rgba(194, 137, 84, 0.3); /* Bordas suaves marrons */
+  --primary-hover: #b07a48;                  /* Marrom mais escuro para hover de botões */
+  
+  /* Tema Claro (Backgrounds e Superfícies) */
   --bg: #FFFFFF;
   --surface: #FFFFFF;
   --surface-2: #F8FAFC; 
   --surface-3: #F1F5F9;
   
-  --brand-dark: #0a0a1a;
-  --primary: #C28954;
-  --primary-dim: rgba(194, 137, 84, 0.1);
-  --primary-border: rgba(194, 137, 84, 0.3);
-  --primary-text: #ab7543;
+  /* Textos Escuros (Usando o Azul Oficial como base para melhor harmonia) */
+  --text: #141434;       /* Títulos e textos principais agora puxam pro Azul Escuro */
+  --text-2: #334155;     /* Textos secundários (Cinza-azulado Escuro) */
+  --text-3: #64748b;     /* Textos terciários/Legendas (Cinza-azulado Médio) */
   
-  --text: #1e293b;
-  --text-2: #475569;
-  --text-3: #94a3b8;
-  
+  /* Bordas */
   --border: #e2e8f0;
   
+  /* Cores de Feedback (Mantendo verde de sucesso) */
   --green-text: #16a34a;
   --green-bg: #dcfce7;
   --green-border: #bbf7d0;
@@ -28,6 +39,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Esconder scrollbar nas abas */
@@ -54,7 +66,7 @@ body {
   color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 16px; /* Ajuste fino de distanciamento */
+  margin-bottom: 16px; 
   display: block;
 }
 
@@ -64,7 +76,7 @@ body {
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 0;
-  padding-bottom: 12px; /* Reduzido de 24px para 12px para aproximar os blocos */
+  padding-bottom: 12px; 
 }
 
 /* A bolinha do ícone */
@@ -78,8 +90,9 @@ body {
   font-size: 14px;
   flex-shrink: 0;
   background-color: var(--surface-2);
-  border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border: 1px solid var(--primary-border); /* Borda agora usa o Marrom suave */
+  color: var(--primary); /* Ícone marrom */
+  box-shadow: 0 1px 2px rgba(194, 137, 84, 0.1);
   position: relative;
   z-index: 10;
 }
@@ -96,7 +109,7 @@ body {
 
 /* O título forte de cada etapa */
 .flow-body strong {
-  color: var(--text);
+  color: var(--brand-dark); /* Títulos agora usam o Azul Oficial */
   font-weight: 700;
   font-size: 14px;
   margin-bottom: 2px;
@@ -107,7 +120,7 @@ body {
   width: 32px;
   display: flex;
   justify-content: center;
-  height: 12px; /* Reduzido de 24px para 12px para aproximar os blocos */
+  height: 12px; 
   flex-shrink: 0;
 }
 
@@ -119,42 +132,42 @@ body {
 }
 
 /* =========================================================
-   NOVAS CLASSES: CARDS DE AVISO (Aplicar em @/lib/data.ts)
+   NOVAS CLASSES: CARDS DE AVISO
    ========================================================= */
 
-/* Card Azul para o Aviso do Kanban */
+/* Card Azul (Aviso / Info) - Reestilizado com o Azul da Marca */
 .card-aviso-azul {
-  background-color: #E6F1FB;
-  border: 1px solid #2A71AA;
-  border-left: 4px solid #2A71AA;
+  background-color: rgba(20, 20, 52, 0.03); /* Fundo super leve do Azul */
+  border: 1px solid rgba(20, 20, 52, 0.15);
+  border-left: 4px solid var(--brand-dark); /* Faixa lateral Azul Oficial */
   padding: 16px;
   border-radius: 6px;
   margin-top: 16px;
   margin-bottom: 16px;
-  color: #1e293b;
+  color: var(--text-2);
 }
 
 .card-aviso-azul strong {
-  color: #2A71AA;
+  color: var(--brand-dark);
   font-size: 14px;
   display: block;
   margin-bottom: 4px;
 }
 
-/* Card Laranja para o Ponto Crítico */
+/* Card Laranja (Ponto Crítico / Warning) - Reestilizado com o Marrom da Marca */
 .card-aviso-laranja {
-  background-color: #FAEEDA;
-  border: 1px solid #B95232;
-  border-left: 4px solid #B95232;
+  background-color: var(--primary-dim); /* Fundo super leve do Marrom */
+  border: 1px solid var(--primary-border);
+  border-left: 4px solid var(--primary); /* Faixa lateral Marrom Oficial */
   padding: 16px;
   border-radius: 6px;
   margin-top: 16px;
   margin-bottom: 16px;
-  color: #1e293b;
+  color: var(--text-2);
 }
 
 .card-aviso-laranja strong {
-  color: #B95232;
+  color: var(--primary);
   font-size: 14px;
   display: block;
   margin-bottom: 4px;

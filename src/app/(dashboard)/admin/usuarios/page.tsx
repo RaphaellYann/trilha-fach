@@ -14,7 +14,8 @@ export default async function AdminUsuariosPage() {
   const users = await getUsers();
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
+    // Reduzido py-10 para py-6 para subir o conteúdo e ajustado max-w para igualar a auditoria
+    <div className="max-w-6xl mx-auto py-6 px-4">
       <h1 className="text-3xl font-black text-[var(--brand-dark)] uppercase tracking-tighter mb-8">
         Gestão de Usuários
       </h1>

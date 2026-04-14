@@ -13,9 +13,9 @@ model User {
   email        String         @unique
   password     String        
   isAdmin      Boolean        @default(false)
+  isActive     Boolean        @default(true) // <-- Campo para o Soft Delete
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  
   taskProgress TaskProgress[]
   auditLogs    AuditLog[]
 }
@@ -25,8 +25,6 @@ model TaskProgress {
   taskId    String   @unique
   completed Boolean  @default(false)
   updatedAt DateTime @updatedAt
-  
-  // Relacionamento com quem alterou por último
   userId    String?  
   user      User?    @relation(fields: [userId], references: [id])
 }
@@ -40,7 +38,7 @@ model AuditLog {
   createdAt DateTime @default(now())
 }
 
-// --- NOVA TABELA: RESPONSABILIDADES EDITÁVEIS ---
+
 model RoleResponsibility {
   id        String   @id @default(cuid())
   roleKey   String   // 'c' (Carmen), 'd' (Daiane) ou 'y' (Yuri)

@@ -1,0 +1,97 @@
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 20, 52, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.confirm-modal-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modalSlideUp 0.3s ease-out;
+}
+
+.confirm-icon-wrapper {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.confirm-icon-wrapper.danger { background-color: #fee2e2; color: #ef4444; }
+.confirm-icon-wrapper.warning { background-color: #fef3c7; color: #f59e0b; }
+
+.confirm-modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--azul-empresa, #141434);
+  text-transform: uppercase;
+}
+
+.confirm-modal-message {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-modal-cancel, .btn-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-modal-cancel { background-color: #f1f5f9; color: #475569; }
+.btn-modal-cancel:hover:not(:disabled) { background-color: #e2e8f0; }
+
+.btn-danger { background-color: #ef4444; color: white; }
+.btn-warning { background-color: #f59e0b; color: white; }
+
+.btn-modal-confirm:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.9; }
+.btn-modal-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalSlideUp { from { opacity: 0; transform: translateY(20deg); } to { opacity: 1; transform: translateY(0); } }
+
+.spinner-mini {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: modalSpin 0.6s linear infinite;
+  display: inline-block;
+}
+@keyframes modalSpin { to { transform: rotate(360deg); } }

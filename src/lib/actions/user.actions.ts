@@ -8,9 +8,11 @@ import { hashPassword } from "../password";
 export async function getUsers() {
   try {
     const session = await auth();
+    // Ajuste de tipo aqui
     if (!(session?.user as any)?.isAdmin) return [];
 
     return await prisma.user.findMany({
+      where: { isActive: true }, 
       select: { id: true, name: true, email: true, isAdmin: true },
       orderBy: { name: "asc" },
     });
@@ -33,7 +35,7 @@ export async function createUser(formData: FormData) {
 
     const hashedPassword = await hashPassword(password);
     await prisma.user.create({
-      data: { name, email, password: hashedPassword, isAdmin },
+      data: { name, email, password: hashedPassword, isAdmin, isActive: true },
     });
 
     revalidatePath("/admin/usuarios");
@@ -71,5 +73,29 @@ export async function updateUser(id: string, formData: FormData) {
     return { success: true };
   } catch (error) {
     return { success: false, error: "Erro ao atualizar usuário." };
+  }
+}
+
+export async function deleteUser(id: string) {
+  try {
+    const session = await auth();
+    if (!(session?.user as any)?.isAdmin) {
+      return { success: false, error: "Não autorizado." };
+    }
+
+    // Corrigindo o erro de tipagem do ID
+    if ((session?.user as any)?.id === id) {
+      return { success: false, error: "Impossível desativar a própria conta." };
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: { isActive: false },
+    });
+    
+    revalidatePath("/admin/usuarios");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Erro ao desativar usuário." };
   }
 }
