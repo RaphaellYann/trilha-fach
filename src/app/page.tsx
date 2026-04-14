@@ -1,6 +1,6 @@
+// src/app/page.tsx
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  // Redireciona automaticamente para a trilha ao acessar a raiz (/)
-  redirect("/trilha");
+  redirect("/trilha"); // Isso força o usuário a ir para onde tem menu
 }
