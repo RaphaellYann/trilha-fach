@@ -1,4 +1,3 @@
-// src/proxy.ts
 import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import { NextResponse } from "next/server";
@@ -25,7 +24,7 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
-// O matcher continua sendo essencial para não travar imagens e ícones
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  // Matcher refinado para ignorar arquivos estáticos e API do Auth.js
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
