@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String        
+  isAdmin       Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  taskProgress  TaskProgress[]
+  auditLogs     AuditLog[]
+}
+
+model TaskProgress {
+  id        String   @id @default(cuid())
+  taskId    String   @unique
+  completed Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  
+  // Relacionamento com quem alterou por último
+  userId    String?  
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  taskId    String   // ID da tarefa (ex: "1-0")
+  action    String   // "CHECK" ou "UNCHECK"
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}

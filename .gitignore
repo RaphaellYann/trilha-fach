@@ -1,41 +1,29 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependências (O que gera os 10k de arquivos)
+node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Next.js build e cache
+.next/
+out/
+build/
 
-# testing
-/coverage
+# Variáveis de ambiente (ESTRITAMENTE PROIBIDO COMITAR)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
 
-# next.js
-/.next/
-/out/
+# Prisma
+/prisma/migrations/
+*.db
+*.db-journal
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# Logs e Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Outros
+.DS_Store
+*.pem

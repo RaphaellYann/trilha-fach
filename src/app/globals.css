@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  /* Paleta Satiro Consultoria */
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F8FAFC; 
+  --surface-3: #F1F5F9;
+  
+  --brand-dark: #0a0a1a;
+  --primary: #C28954;
+  --primary-dim: rgba(194, 137, 84, 0.1);
+  --primary-border: rgba(194, 137, 84, 0.3);
+  --primary-text: #ab7543;
+  
+  --text: #1e293b;
+  --text-2: #475569;
+  --text-3: #94a3b8;
+  
+  --border: #e2e8f0;
+  
+  --green-text: #16a34a;
+  --green-bg: #dcfce7;
+  --green-border: #bbf7d0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Esconder scrollbar nas abas */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* =========================================================
+   ESTILOS PARA O HTML INJETADO (O Fluxo do Pedido)
+   ========================================================= */
+.injecao-html {
+  line-height: 1.6;
+}
+
+/* O título "FLUXO DO PEDIDO" */
+.injecao-html .section-label, 
+.injecao-html h4 {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px; /* Ajuste fino de distanciamento */
+  display: block;
+}
+
+/* A linha de cada etapa */
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 0;
+  padding-bottom: 12px; /* Reduzido de 24px para 12px para aproximar os blocos */
+}
+
+/* A bolinha do ícone */
+.flow-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  position: relative;
+  z-index: 10;
+}
+
+/* Os textos ao lado do ícone */
+.flow-body {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: var(--text-2);
+  flex: 1;
+  padding-top: 6px;
+}
+
+/* O título forte de cada etapa */
+.flow-body strong {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+/* O contêiner da linha vertical */
+.flow-connector {
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  height: 12px; /* Reduzido de 24px para 12px para aproximar os blocos */
+  flex-shrink: 0;
+}
+
+/* A Linha Vertical que conecta as etapas */
+.flow-line {
+  width: 2px;
+  height: 100%;
+  background-color: var(--border);
+}
+
+/* =========================================================
+   NOVAS CLASSES: CARDS DE AVISO (Aplicar em @/lib/data.ts)
+   ========================================================= */
+
+/* Card Azul para o Aviso do Kanban */
+.card-aviso-azul {
+  background-color: #E6F1FB;
+  border: 1px solid #2A71AA;
+  border-left: 4px solid #2A71AA;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.card-aviso-azul strong {
+  color: #2A71AA;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Card Laranja para o Ponto Crítico */
+.card-aviso-laranja {
+  background-color: #FAEEDA;
+  border: 1px solid #B95232;
+  border-left: 4px solid #B95232;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.card-aviso-laranja strong {
+  color: #B95232;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
