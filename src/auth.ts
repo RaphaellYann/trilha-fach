@@ -28,4 +28,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  // Estratégia JWT é obrigatória para funcionar com Edge Middleware
+  session: { strategy: "jwt" },
 });

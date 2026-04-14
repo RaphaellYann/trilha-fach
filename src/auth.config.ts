@@ -20,5 +20,5 @@ export const authConfig = {
       return session;
     },
   },
-  providers: [], // Fica vazio, será preenchido no auth.ts
+  providers: [], // Fica vazio aqui
 } satisfies NextAuthConfig;
