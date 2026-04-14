@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition } from "react";
 import { TRILHA_STAGES, WHO_LBL } from "@/lib/data"; // Removi WHO_MAP que não estava sendo usado para limpar o código
-import { toggleTaskStatus, getAllTaskStatuses } from "@/lib/actions";
+import { toggleTaskStatus, getAllTaskStatuses } from "@/lib/actions/trilha.actions";
 // Import Sênior: Trazendo o componente de responsabilidades interativas
 import EditableResponsibilities from "@/components/EditableResponsibilities";
 

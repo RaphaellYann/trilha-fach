@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getResponsibilities, addResponsibility, deleteResponsibility, updateResponsibility } from "@/lib/actions";
+import { getResponsibilities, addResponsibility, deleteResponsibility, updateResponsibility } from "@/lib/actions/responsibility.actions";
 
 const PROFILES = {
   c: { name: 'Carmen', role: 'Analista PCP · Fach 2', badge: 'PCP FACH 2', bdgColor: 'bg-[#EEEDFE] text-[#5B50D6]', init: 'CA' },

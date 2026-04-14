@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TRILHA_STAGES, WHO_LBL } from "@/lib/data";
-import { getAllTaskStatuses } from "@/lib/actions";
+import { getAllTaskStatuses } from "@/lib/actions/trilha.actions"
 
 export default function PendenciasPage() {
   const [filterWho, setFilterWho] = useState<string>("all");
