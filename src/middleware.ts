@@ -1,8 +1,8 @@
+// src/middleware.ts
 import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import { NextResponse } from "next/server";
 
-// Instância leve que não carrega o Prisma
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
@@ -25,6 +25,18 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
+// MATCHER SÊNIOR: Ignora explicitamente arquivos estáticos e pastas de sistema
 export const config = {
-  matcher: ["/trilha/:path*", "/pendencias/:path*", "/pilares/:path*", "/admin/:path*", "/login"],
+  matcher: [
+    /*
+     * Ignora: api/auth, _next/static, _next/image, favicon.ico, public assets
+     */
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\..*).*)",
+    // Mantém as rotas que queremos proteger
+    "/trilha/:path*", 
+    "/pendencias/:path*", 
+    "/pilares/:path*", 
+    "/admin/:path*", 
+    "/login"
+  ],
 };

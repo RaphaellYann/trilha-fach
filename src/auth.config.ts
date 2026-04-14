@@ -1,3 +1,4 @@
+// src/auth.config.ts
 import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
@@ -20,5 +21,5 @@ export const authConfig = {
       return session;
     },
   },
-  providers: [], // Fica vazio aqui
+  providers: [], // Fica vazio, preenchemos no auth.ts
 } satisfies NextAuthConfig;
