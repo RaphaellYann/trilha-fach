@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getResponsibilities, addResponsibility, deleteResponsibility } from "@/lib/actions";
+import { getResponsibilities, addResponsibility, deleteResponsibility, updateResponsibility } from "@/lib/actions";
 
 const PROFILES = {
   c: { name: 'Carmen', role: 'Analista PCP · Fach 2', badge: 'PCP FACH 2', bdgColor: 'bg-[#EEEDFE] text-[#5B50D6]', init: 'CA' },
@@ -11,9 +11,15 @@ const PROFILES = {
 
 export default function EditableResponsibilities() {
   const [data, setData] = useState<Record<string, {id: string, text: string}[]>>({ c: [], d: [], y: [] });
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  
+  // Estados para Adicionar
   const [addingTo, setAddingTo] = useState<string | null>(null);
   const [newText, setNewText] = useState("");
+  
+  // Estados para Editar
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
 
   useEffect(() => {
     loadData();
@@ -22,26 +28,61 @@ export default function EditableResponsibilities() {
   const loadData = async () => {
     const res = await getResponsibilities();
     setData(res);
-    setLoading(false);
+    setInitialLoading(false); // Só usamos o loading na primeira vez que a página abre
   };
 
   const handleAdd = async (roleKey: string) => {
     if (!newText.trim()) return;
-    setLoading(true);
-    await addResponsibility(roleKey, newText);
+    const textToSave = newText;
+    
+    // UI Otimista: Limpa o input na hora sem piscar a tela
     setNewText("");
     setAddingTo(null);
+    
+    // Salva no banco silenciosamente
+    await addResponsibility(roleKey, textToSave);
     await loadData();
+  };
+
+  const handleUpdate = async (id: string, textToSave: string) => {
+    if (!textToSave.trim()) {
+      setEditingId(null);
+      return;
+    }
+    
+    // UI Otimista: Fecha o input e atualiza o texto na tela IMEDIATAMENTE
+    setEditingId(null);
+    setData(prev => {
+      const newData = { ...prev };
+      Object.keys(newData).forEach(key => {
+        const itemIndex = newData[key].findIndex(i => i.id === id);
+        if (itemIndex > -1) newData[key][itemIndex].text = textToSave;
+      });
+      return newData;
+    });
+
+    // Envia a requisição para o banco de dados em segundo plano
+    await updateResponsibility(id, textToSave);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Remover esta responsabilidade?")) return;
-    setLoading(true);
+    
+    // UI Otimista: Remove da tela imediatamente
+    setData(prev => {
+      const newData = { ...prev };
+      Object.keys(newData).forEach(key => {
+        newData[key] = newData[key].filter(i => i.id !== id);
+      });
+      return newData;
+    });
+
+    // Deleta no banco silenciosamente
     await deleteResponsibility(id);
-    await loadData();
   };
 
-  if (loading) return <div className="p-4 text-center text-[var(--text-3)] text-xs font-bold uppercase tracking-widest">Carregando...</div>;
+  // Loader apenas na montagem inicial
+  if (initialLoading) return <div className="p-4 text-center text-[var(--text-3)] text-xs font-bold uppercase tracking-widest">Carregando dados...</div>;
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,37 +110,70 @@ export default function EditableResponsibilities() {
           {/* Lista de Responsabilidades */}
           <div className="flex flex-col gap-2 mb-4">
             {data[key]?.map((item) => (
-              <div key={item.id} className="flex items-center justify-between group py-1">
-                <div className="flex items-center gap-3">
-                  <span className="text-[var(--text-3)]">⠇</span>
-                  <span className="text-[13px] text-[var(--text)]">{item.text}</span>
+              <div key={item.id} className="flex items-center justify-between group py-1 min-h-[32px]">
+                <div className="flex items-center gap-3 flex-1">
+                  <span className="text-[var(--text-3)] cursor-grab">⠇</span>
+                  
+                  {/* Lógica de Alternância: Texto vs Input */}
+                  {editingId === item.id ? (
+                    <input 
+                      autoFocus
+                      className="flex-1 bg-[var(--surface-2)] border border-[var(--primary)] rounded px-2 py-0.5 text-[13px] outline-none"
+                      value={editingText}
+                      onChange={(e) => setEditingText(e.target.value)}
+                      onBlur={() => handleUpdate(item.id, editingText)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault(); // Evita conflitos de evento
+                          handleUpdate(item.id, editingText);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <span 
+                      onClick={() => { setEditingId(item.id); setEditingText(item.text); }}
+                      className="text-[13px] text-[var(--text)] cursor-text hover:text-[var(--primary)] transition-colors"
+                      title="Clique para editar"
+                    >
+                      {item.text}
+                    </span>
+                  )}
                 </div>
-                <button onClick={() => handleDelete(item.id)} className="text-[var(--text-3)] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                  ✕
-                </button>
+                
+                {/* Botão de Excluir */}
+                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity pl-2">
+                  <button onClick={() => handleDelete(item.id)} className="text-[var(--text-3)] hover:text-red-500 p-1">
+                    ✕
+                  </button>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Adicionar Novo */}
           {addingTo === key ? (
-            <div className="flex gap-2 items-center border border-[var(--border)] rounded p-1 pl-3 bg-[var(--surface-2)]">
+            <div className="flex gap-2 items-center border border-[var(--border)] rounded p-1 pl-3 bg-[var(--surface-2)] animate-in fade-in duration-200">
               <input 
                 autoFocus
                 type="text" 
                 value={newText}
                 onChange={(e) => setNewText(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleAdd(key)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAdd(key);
+                  }
+                }}
                 className="flex-1 bg-transparent text-[13px] outline-none text-[var(--text)]"
-                placeholder="Digite a responsabilidade..."
+                placeholder="Digite a nova responsabilidade..."
               />
               <button onClick={() => handleAdd(key)} className="px-3 py-1 bg-[var(--primary)] text-white text-xs font-bold rounded">SALVAR</button>
-              <button onClick={() => setAddingTo(null)} className="px-2 py-1 text-[var(--text-3)] text-xs font-bold hover:text-[var(--text)]">CANCELAR</button>
+              <button onClick={() => setAddingTo(null)} className="px-2 py-1 text-[var(--text-3)] text-xs font-bold hover:text-[var(--text)]">✕</button>
             </div>
           ) : (
             <button 
               onClick={() => setAddingTo(key)}
-              className="text-[13px] font-bold text-[var(--text-3)] hover:text-[var(--primary)] transition-colors w-full text-left py-2 border border-dashed border-[var(--border)] rounded"
+              className="text-[12px] font-bold text-[var(--text-3)] hover:text-[var(--primary)] hover:border-[var(--primary)] transition-all w-full text-left py-2 px-4 border border-dashed border-[var(--border)] rounded bg-gray-50/50"
             >
               + Adicionar nova responsabilidade para {profile.name}
             </button>

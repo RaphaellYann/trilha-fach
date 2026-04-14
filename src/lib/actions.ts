@@ -9,7 +9,7 @@ import { hashPassword } from "./password";
 export async function toggleTaskStatus(taskId: string, currentStatus: boolean) {
   try {
     const session = await auth();
-    
+
     // Trava de Segurança: Se não houver ID na sessão, interrompe aqui.
     // O banco de dados nunca será tocado se o usuário não estiver logado.
     if (!session?.user?.id) {
@@ -77,7 +77,7 @@ export async function createUser(formData: FormData) {
     await prisma.user.create({
       data: { name, email, password: hashedPassword, isAdmin },
     });
-    
+
     revalidatePath("/admin/usuarios");
     return { success: true };
   } catch (error) {
@@ -122,15 +122,15 @@ export async function getResponsibilities() {
     const resp = await prisma.roleResponsibility.findMany({
       orderBy: { order: 'asc' }
     });
-    
+
     // Agrupa no formato que o front-end espera: { c: [], d: [], y: [] }
-    const grouped: Record<string, {id: string, text: string}[]> = { c: [], d: [], y: [] };
+    const grouped: Record<string, { id: string, text: string }[]> = { c: [], d: [], y: [] };
     resp.forEach(r => {
       if (grouped[r.roleKey]) {
         grouped[r.roleKey].push({ id: r.id, text: r.text });
       }
     });
-    
+
     return grouped;
   } catch (error) {
     console.error("Erro ao buscar responsabilidades:", error);
@@ -144,18 +144,18 @@ export async function addResponsibility(roleKey: string, text: string) {
     const session = await auth();
     if (!session?.user) return { success: false, error: "Acesso negado." };
     if (!text.trim()) return { success: false, error: "Texto vazio." };
-    
+
     // Calcula a próxima ordem (para sempre adicionar no final da lista)
     const count = await prisma.roleResponsibility.count({ where: { roleKey } });
 
     await prisma.roleResponsibility.create({
-      data: { 
-        roleKey, 
+      data: {
+        roleKey,
         text,
-        order: count 
+        order: count
       }
     });
-    
+
     revalidatePath("/trilha");
     return { success: true };
   } catch (error) {
@@ -174,5 +174,24 @@ export async function deleteResponsibility(id: string) {
     return { success: true };
   } catch (error) {
     return { success: false, error: "Erro ao deletar responsabilidade." };
+  }
+}
+
+// 4. Atualizar texto de uma responsabilidade existente
+export async function updateResponsibility(id: string, text: string) {
+  try {
+    const session = await auth();
+    if (!session?.user) return { success: false, error: "Acesso negado." };
+    if (!text.trim()) return { success: false, error: "Texto vazio." };
+
+    await prisma.roleResponsibility.update({
+      where: { id },
+      data: { text }
+    });
+
+    revalidatePath("/trilha");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Erro ao atualizar." };
   }
 }
