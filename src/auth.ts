@@ -16,6 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           where: { email: credentials.email as string },
         });
 
+        // Use comparePassword aqui (certifique-se que comparePassword NÃO importa o Prisma)
         if (!user || !(await comparePassword(credentials.password as string, user.password))) {
           return null;
         }

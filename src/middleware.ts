@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import { NextResponse } from "next/server";
 
+// Criamos uma instância dedicada ao Edge (sem Prisma)
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
@@ -10,14 +11,17 @@ export default auth((req) => {
   const isLoggedIn = !!session;
   const isAuthPage = nextUrl.pathname === "/login";
 
+  // 1. Se logado no login -> vai para trilha
   if (isLoggedIn && isAuthPage) {
     return NextResponse.redirect(new URL("/trilha", nextUrl));
   }
 
+  // 2. Se não logado e não é login -> vai para login
   if (!isLoggedIn && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
+  // 3. Proteção de Admin
   if (nextUrl.pathname.startsWith("/admin") && !(session?.user as any)?.isAdmin) {
     return NextResponse.redirect(new URL("/trilha", nextUrl));
   }
@@ -25,18 +29,7 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
-// MATCHER SÊNIOR: Ignora explicitamente arquivos estáticos e pastas de sistema
+// MATCHER SÊNIOR: Não deixa o middleware rodar em lixo (imagens, ícones, etc)
 export const config = {
-  matcher: [
-    /*
-     * Ignora: api/auth, _next/static, _next/image, favicon.ico, public assets
-     */
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\..*).*)",
-    // Mantém as rotas que queremos proteger
-    "/trilha/:path*", 
-    "/pendencias/:path*", 
-    "/pilares/:path*", 
-    "/admin/:path*", 
-    "/login"
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
