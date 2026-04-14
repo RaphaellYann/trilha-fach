@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useTransition } from "react";
-import { TRILHA_STAGES, WHO_LBL, WHO_MAP } from "@/lib/data";
+import { TRILHA_STAGES, WHO_LBL } from "@/lib/data"; // Removi WHO_MAP que não estava sendo usado para limpar o código
 import { toggleTaskStatus, getAllTaskStatuses } from "@/lib/actions";
+// Import Sênior: Trazendo o componente de responsabilidades interativas
+import EditableResponsibilities from "@/components/EditableResponsibilities";
 
 export default function TrilhaPage() {
   const [checkedTasks, setCheckedTasks] = useState<Record<string, boolean>>({});
@@ -85,6 +87,7 @@ export default function TrilhaPage() {
   };
 
   const toggleStage = (stageId: number) => setExpandedStages(prev => ({ ...prev, [stageId]: !prev[stageId] }));
+  
   const toggleTaskDetails = (taskId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setExpandedTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
@@ -204,11 +207,13 @@ export default function TrilhaPage() {
                     <div className="flex flex-col">
                       {stage.tasks.map((task) => {
                         const isChecked = checkedTasks[task.id] || false;
-                        const hasDetails = !!task.detailsHtml;
                         const isTaskExpanded = expandedTasks[task.id];
+                        
+                        // Ajuste Sênior: Agora a tarefa "1-2" se comporta como se tivesse "detailsHtml",
+                        // liberando a setinha de expansão para que o usuário possa abrir o componente.
+                        const hasDetails = !!task.detailsHtml || task.id === '1-2';
 
                         return (
-                          /* CAIXA DA TAREFA: O id={task.id} permite o scroll. A classe bg-orange-50 aplica a cor. */
                           <div key={task.id} id={task.id} className={`border-b border-[var(--border)] last:border-0 transition-all duration-500 ${highlightedTask === task.id ? 'bg-orange-50 border-l-4 border-l-orange-400' : 'border-l-4 border-l-transparent'}`}>
 
                             <div className={`flex items-center gap-3 py-3 px-2 cursor-pointer group transition-colors ${highlightedTask === task.id ? '' : 'hover:bg-[var(--surface-2)]'}`} onClick={() => toggleTask(task.id)}>
@@ -226,19 +231,29 @@ export default function TrilhaPage() {
                                 {WHO_LBL[task.w as keyof typeof WHO_LBL]}
                               </span>
 
+                              {/* Botão de Expansão (Aparece se tiver detailsHtml ou se for a task 1-2) */}
                               {hasDetails && (
-                                <button className={`w-6 h-6 flex items-center justify-center text-[var(--primary)] hover:bg-[var(--primary-dim)] rounded transition-transform ${isTaskExpanded ? 'rotate-90' : ''}`} onClick={(e) => toggleTaskDetails(task.id, e)}>
+                                <button 
+                                  className={`w-6 h-6 flex items-center justify-center text-[var(--primary)] hover:bg-[var(--primary-dim)] rounded transition-transform ${isTaskExpanded ? 'rotate-90' : ''}`} 
+                                  onClick={(e) => toggleTaskDetails(task.id, e)}
+                                >
                                   ›
                                 </button>
                               )}
                             </div>
 
-                            {/* Injetor HTML */}
+                            {/* Injetor HTML ou Componente Dinâmico */}
                             {hasDetails && isTaskExpanded && (
-                              <div
-                                className="ml-[3.25rem] mr-4 my-3 p-6 bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--primary)] rounded-r-lg shadow-sm text-[13px] text-[var(--text-2)] injecao-html"
-                                dangerouslySetInnerHTML={{ __html: task.detailsHtml || "" }}
-                              />
+                              <div className="ml-[3.25rem] mr-4 my-3 p-6 bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--primary)] rounded-r-lg shadow-sm text-[13px] text-[var(--text-2)] injecao-html">
+                                
+                                {/* O Pulo do Gato: Se for a tarefa 1-2, injeta o componente. Senão, injeta o HTML. */}
+                                {task.id === '1-2' ? (
+                                  <EditableResponsibilities />
+                                ) : (
+                                  <div dangerouslySetInnerHTML={{ __html: task.detailsHtml || "" }} />
+                                )}
+
+                              </div>
                             )}
                           </div>
                         );

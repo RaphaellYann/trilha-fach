@@ -8,16 +8,16 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String
-  email         String         @unique
-  password      String        
-  isAdmin       Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id           String         @id @default(cuid())
+  name         String
+  email        String         @unique
+  password     String        
+  isAdmin      Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   
-  taskProgress  TaskProgress[]
-  auditLogs     AuditLog[]
+  taskProgress TaskProgress[]
+  auditLogs    AuditLog[]
 }
 
 model TaskProgress {
@@ -37,5 +37,14 @@ model AuditLog {
   action    String   // "CHECK" ou "UNCHECK"
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+// --- NOVA TABELA: RESPONSABILIDADES EDITÁVEIS ---
+model RoleResponsibility {
+  id        String   @id @default(cuid())
+  roleKey   String   // 'c' (Carmen), 'd' (Daiane) ou 'y' (Yuri)
+  text      String   // O texto da responsabilidade
+  order     Int      @default(0) // Ordem de exibição
   createdAt DateTime @default(now())
 }
