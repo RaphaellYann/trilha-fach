@@ -16,9 +16,9 @@ export default async function AdminUsuariosPage() {
   return (
     // Reduzido py-10 para py-6 para subir o conteúdo e ajustado max-w para igualar a auditoria
     <div className="max-w-6xl mx-auto py-6 px-4">
-      <h1 className="text-3xl font-black text-[var(--brand-dark)] uppercase tracking-tighter mb-8">
-        Gestão de Usuários
-      </h1>
+      <h1 className="text-3xl font-medium text-[var(--brand-dark)] uppercase tracking-tight mb-2">
+                Gestão de Usuários
+              </h1>
 
       {/* Toda a inteligência de UI (Tabela, Modal, Editar, Criar) foi isolada no Cliente */}
       <UserManagementClient initialUsers={users} />

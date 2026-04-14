@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useTransition } from "react";
-import { TRILHA_STAGES, WHO_LBL } from "@/lib/data"; // Removi WHO_MAP que não estava sendo usado para limpar o código
+import { TRILHA_STAGES, WHO_LBL } from "@/lib/data";
 import { toggleTaskStatus, getAllTaskStatuses } from "@/lib/actions/trilha.actions";
-// Import Sênior: Trazendo o componente de responsabilidades interativas
 import EditableResponsibilities from "@/components/EditableResponsibilities";
+import EvidenceButton from "@/components/EvidenceButton";
 
 export default function TrilhaPage() {
   const [checkedTasks, setCheckedTasks] = useState<Record<string, boolean>>({});
@@ -87,7 +87,7 @@ export default function TrilhaPage() {
   };
 
   const toggleStage = (stageId: number) => setExpandedStages(prev => ({ ...prev, [stageId]: !prev[stageId] }));
-  
+
   const toggleTaskDetails = (taskId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setExpandedTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
@@ -208,51 +208,74 @@ export default function TrilhaPage() {
                       {stage.tasks.map((task) => {
                         const isChecked = checkedTasks[task.id] || false;
                         const isTaskExpanded = expandedTasks[task.id];
-                        
-                        // Ajuste Sênior: Agora a tarefa "1-2" se comporta como se tivesse "detailsHtml",
-                        // liberando a setinha de expansão para que o usuário possa abrir o componente.
                         const hasDetails = !!task.detailsHtml || task.id === '1-2';
+
+                        // Por enquanto fixo para teste na 1-1
+                        const hasEvidence = false;
 
                         return (
                           <div key={task.id} id={task.id} className={`border-b border-[var(--border)] last:border-0 transition-all duration-500 ${highlightedTask === task.id ? 'bg-orange-50 border-l-4 border-l-orange-400' : 'border-l-4 border-l-transparent'}`}>
 
-                            <div className={`flex items-center gap-3 py-3 px-2 cursor-pointer group transition-colors ${highlightedTask === task.id ? '' : 'hover:bg-[var(--surface-2)]'}`} onClick={() => toggleTask(task.id)}>
-                              <input type="checkbox" className="w-4 h-4 accent-[var(--primary)] cursor-pointer mt-0.5 shrink-0" checked={isChecked} readOnly />
-                              <span className={`flex-1 text-[13px] leading-snug transition-colors ${isChecked ? 'line-through text-[var(--text-3)]' : 'text-[var(--text-2)] group-hover:text-[var(--text)]'}`}>
+                            {/* LINHA: Removi o onClick daqui. Agora clicar no texto NÃO marca check */}
+                            <div className="flex items-center gap-3 py-3 px-2 transition-colors">
+
+                              {/* CHECKBOX: Único gatilho para concluir a tarefa */}
+                              <input
+                                type="checkbox"
+                                className="w-5 h-5 accent-[var(--primary)] cursor-pointer mt-0.5 shrink-0 transition-transform active:scale-90"
+                                checked={isChecked}
+                                onChange={() => toggleTask(task.id)} // Só dispara aqui!
+                              />
+
+                              <span className={`flex-1 text-[13px] leading-snug transition-colors ${isChecked ? 'line-through text-[var(--text-3)]' : 'text-[var(--text-2)]'}`}>
                                 {task.t}
                               </span>
 
-                              {/* Badge do Responsável */}
-                              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 border ${task.w === 'c' ? 'bg-[#EEEDFE] text-[#5B50D6] border-[#5B50D6]/20' :
-                                task.w === 'd' ? 'bg-[#E6F1FB] text-[#2A71AA] border-[#2A71AA]/20' :
-                                  task.w === 'y' ? 'bg-[#FAEEDA] text-[#B95232] border-[#B95232]/20' :
-                                    'bg-[var(--surface-3)] text-[var(--text-3)] border-[var(--border)]'
-                                }`}>
-                                {WHO_LBL[task.w as keyof typeof WHO_LBL]}
-                              </span>
+                              {/* ÁREA DE AÇÃO (CLIPE + NOME) */}
+                              <div className="flex items-center gap-3 shrink-0">
 
-                              {/* Botão de Expansão (Aparece se tiver detailsHtml ou se for a task 1-2) */}
-                              {hasDetails && (
-                                <button 
-                                  className={`w-6 h-6 flex items-center justify-center text-[var(--primary)] hover:bg-[var(--primary-dim)] rounded transition-transform ${isTaskExpanded ? 'rotate-90' : ''}`} 
-                                  onClick={(e) => toggleTaskDetails(task.id, e)}
-                                >
-                                  ›
-                                </button>
-                              )}
+                                {/* BOTÃO DE ANEXO: Aparece do lado do nome na tarefa 1-1 */}
+                                {task.id === '1-1' && (
+                                  <div className="flex items-center">
+                                    <EvidenceButton
+                                      taskId={task.id}
+                                      hasEvidence={hasEvidence}
+                                    />
+                                  </div>
+                                )}
+
+                                {/* Badge do Responsável (Ex: DAIANE) */}
+                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border ${task.w === 'c' ? 'bg-[#EEEDFE] text-[#5B50D6] border-[#5B50D6]/20' :
+                                    task.w === 'd' ? 'bg-[#E6F1FB] text-[#2A71AA] border-[#2A71AA]/20' :
+                                      task.w === 'y' ? 'bg-[#FAEEDA] text-[#B95232] border-[#B95232]/20' :
+                                        'bg-[var(--surface-3)] text-[var(--text-3)] border-[var(--border)]'
+                                  }`}>
+                                  {WHO_LBL[task.w as keyof typeof WHO_LBL]}
+                                </span>
+
+                                {/* Botão de Expansão (Detalhes) */}
+                                {hasDetails && (
+                                  <button
+                                    className={`w-6 h-6 flex items-center justify-center text-[var(--primary)] hover:bg-[var(--primary-dim)] rounded transition-transform ${isTaskExpanded ? 'rotate-90' : ''}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      toggleTaskDetails(task.id, e);
+                                    }}
+                                  >
+                                    ›
+                                  </button>
+                                )}
+                              </div>
                             </div>
 
-                            {/* Injetor HTML ou Componente Dinâmico */}
+                            {/* Injetor de Conteúdo Extra */}
                             {hasDetails && isTaskExpanded && (
-                              <div className="ml-[3.25rem] mr-4 my-3 p-6 bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--primary)] rounded-r-lg shadow-sm text-[13px] text-[var(--text-2)] injecao-html">
-                                
-                                {/* O Pulo do Gato: Se for a tarefa 1-2, injeta o componente. Senão, injeta o HTML. */}
+                              <div className="ml-[3.25rem] mr-4 my-3 p-6 bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--primary)] rounded-r-lg shadow-sm text-[13px] text-[var(--text-2)] injecao-html animate-in slide-in-from-top-2 duration-300">
                                 {task.id === '1-2' ? (
                                   <EditableResponsibilities />
                                 ) : (
                                   <div dangerouslySetInnerHTML={{ __html: task.detailsHtml || "" }} />
                                 )}
-
                               </div>
                             )}
                           </div>

@@ -8,9 +8,9 @@ export default async function AuditoriaPage() {
 
   return (
     <div className="max-w-5xl mx-auto py-8">
-      <h1 className="text-2xl font-black uppercase tracking-tighter mb-6 text-[var(--brand-dark)]">
-        Registro de Auditoria
-      </h1>
+      <h1 className="text-3xl font-medium text-[var(--brand-dark)] uppercase tracking-tight mb-2">
+                Auditoria
+              </h1>
 
       <div className="bg-white border border-[var(--border)] rounded-lg overflow-hidden shadow-sm">
         <table className="w-full text-left text-sm">

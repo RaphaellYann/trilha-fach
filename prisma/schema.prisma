@@ -13,11 +13,12 @@ model User {
   email        String         @unique
   password     String        
   isAdmin      Boolean        @default(false)
-  isActive     Boolean        @default(true) // <-- Campo para o Soft Delete
+  isActive     Boolean        @default(true) 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   taskProgress TaskProgress[]
   auditLogs    AuditLog[]
+  evidences    TaskEvidence[] 
 }
 
 model TaskProgress {
@@ -27,6 +28,16 @@ model TaskProgress {
   updatedAt DateTime @updatedAt
   userId    String?  
   user      User?    @relation(fields: [userId], references: [id])
+}
+
+model TaskEvidence {
+  id        String   @id @default(cuid())
+  taskId    String   // Ex: '1-1'
+  fileUrl   String   // Link do arquivo
+  fileName  String   // Nome original do arquivo
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model AuditLog {
