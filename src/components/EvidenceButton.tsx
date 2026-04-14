@@ -4,12 +4,15 @@ import { CldUploadWidget } from 'next-cloudinary';
 import { addEvidence } from "@/lib/actions/evidence.actions";
 import { useState } from "react";
 
+// 1. A interface agora aceita o onUploadSuccess para não dar erro no build
 interface EvidenceButtonProps {
   taskId: string;
   hasEvidence: boolean;
+  onUploadSuccess?: () => void;
 }
 
-export default function EvidenceButton({ taskId, hasEvidence }: EvidenceButtonProps) {
+// 2. Recebendo a prop aqui
+export default function EvidenceButton({ taskId, hasEvidence, onUploadSuccess }: EvidenceButtonProps) {
   const [loading, setLoading] = useState(false);
 
   return (
@@ -18,7 +21,15 @@ export default function EvidenceButton({ taskId, hasEvidence }: EvidenceButtonPr
       onSuccess={async (result: any) => {
         setLoading(true);
         const { secure_url, original_filename } = result.info;
+        
+        // Salva a URL no Neon
         await addEvidence(taskId, secure_url, original_filename);
+        
+        // 3. Aciona o "olhinho" na mesma hora na tela da Trilha
+        if (onUploadSuccess) {
+          onUploadSuccess();
+        }
+        
         setLoading(false);
       }}
     >
@@ -29,7 +40,7 @@ export default function EvidenceButton({ taskId, hasEvidence }: EvidenceButtonPr
             open();
           }}
           disabled={loading}
-          title={hasEvidence ? "Ver/Trocar evidência" : "Anexar evidência"}
+          title={hasEvidence ? "Substituir evidência" : "Anexar evidência"}
           className={`group relative p-2 rounded-full transition-all flex items-center justify-center ${
             hasEvidence 
               ? "bg-[var(--primary-dim)] text-[var(--primary)] border border-[var(--primary-border)]" 
