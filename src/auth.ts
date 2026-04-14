@@ -1,4 +1,3 @@
-// src/auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "@/lib/prisma";
@@ -11,24 +10,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
         });
-
-        // Use comparePassword aqui (certifique-se que comparePassword NÃO importa o Prisma)
         if (!user || !(await comparePassword(credentials.password as string, user.password))) {
           return null;
         }
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        };
+        return { id: user.id, name: user.name, email: user.email, isAdmin: user.isAdmin };
       },
     }),
   ],
-  session: { strategy: "jwt" },
 });
