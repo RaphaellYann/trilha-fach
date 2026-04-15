@@ -4,12 +4,12 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Captura as variáveis do seu arquivo .env
+
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPass = process.env.ADMIN_PASS;
   const adminName = process.env.ADMIN_NAME;
 
-  // Validação crítica: O script não deve rodar se o .env estiver incompleto
+
   if (!adminEmail || !adminPass || !adminName) {
     throw new Error(
       "Falha no Seed: Variáveis ADMIN_EMAIL, ADMIN_PASS ou ADMIN_NAME não encontradas no .env"
@@ -20,8 +20,6 @@ async function main() {
 
   const hashedPassword = await bcrypt.hash(adminPass, 10);
 
-  // O upsert evita duplicidade: se o e-mail existir, ele não faz nada (update: {}),
-  // se não existir, ele cria o usuário admin.
   const admin = await prisma.user.upsert({
     where: { email: adminEmail },
     update: {},

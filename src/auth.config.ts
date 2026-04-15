@@ -20,5 +20,5 @@ export const authConfig = {
       return session;
     },
   },
-  providers: [], // Obrigatório estar vazio aqui para o Edge
+  providers: [], 
 } satisfies NextAuthConfig;

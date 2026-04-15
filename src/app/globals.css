@@ -1,35 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* * ========================================
-   * PALETA OFICIAL SATIRO CONSULTORIA
-   * ======================================== 
-   */
-   
-  /* Cores Base da Marca */
-  --brand-dark: #141434; /* Azul Oficial da Empresa */
-  --primary: #C28954;    /* Marrom Oficial da Empresa */
+ 
+  --brand-dark: #141434; 
+  --primary: #C28954;    
+  --primary-dim: rgba(194, 137, 84, 0.1);    
+  --primary-border: rgba(194, 137, 84, 0.3); 
+  --primary-hover: #b07a48;                 
   
-  /* Variações do Marrom (Primary) */
-  --primary-dim: rgba(194, 137, 84, 0.1);    /* Fundo para badges/hover */
-  --primary-border: rgba(194, 137, 84, 0.3); /* Bordas suaves marrons */
-  --primary-hover: #b07a48;                  /* Marrom mais escuro para hover de botões */
-  
-  /* Tema Claro (Backgrounds e Superfícies) */
+
   --bg: #FFFFFF;
   --surface: #FFFFFF;
   --surface-2: #F8FAFC; 
   --surface-3: #F1F5F9;
+
+  --text: #141434;       
+  --text-2: #334155;     
+  --text-3: #64748b;     
   
-  /* Textos Escuros (Usando o Azul Oficial como base para melhor harmonia) */
-  --text: #141434;       /* Títulos e textos principais agora puxam pro Azul Escuro */
-  --text-2: #334155;     /* Textos secundários (Cinza-azulado Escuro) */
-  --text-3: #64748b;     /* Textos terciários/Legendas (Cinza-azulado Médio) */
-  
-  /* Bordas */
+
   --border: #e2e8f0;
   
-  /* Cores de Feedback (Mantendo verde de sucesso) */
+
   --green-text: #16a34a;
   --green-bg: #dcfce7;
   --green-border: #bbf7d0;
@@ -51,14 +43,10 @@ body {
   scrollbar-width: none;
 }
 
-/* =========================================================
-   ESTILOS PARA O HTML INJETADO (O Fluxo do Pedido)
-   ========================================================= */
 .injecao-html {
   line-height: 1.6;
 }
 
-/* O título "FLUXO DO PEDIDO" */
 .injecao-html .section-label, 
 .injecao-html h4 {
   font-size: 11px;
@@ -70,7 +58,6 @@ body {
   display: block;
 }
 
-/* A linha de cada etapa */
 .flow-step {
   display: flex;
   align-items: flex-start;
@@ -79,7 +66,7 @@ body {
   padding-bottom: 12px; 
 }
 
-/* A bolinha do ícone */
+
 .flow-icon {
   width: 32px;
   height: 32px;
@@ -90,14 +77,13 @@ body {
   font-size: 14px;
   flex-shrink: 0;
   background-color: var(--surface-2);
-  border: 1px solid var(--primary-border); /* Borda agora usa o Marrom suave */
-  color: var(--primary); /* Ícone marrom */
+  border: 1px solid var(--primary-border); 
+  color: var(--primary);
   box-shadow: 0 1px 2px rgba(194, 137, 84, 0.1);
   position: relative;
   z-index: 10;
 }
 
-/* Os textos ao lado do ícone */
 .flow-body {
   display: flex;
   flex-direction: column;
@@ -107,15 +93,13 @@ body {
   padding-top: 6px;
 }
 
-/* O título forte de cada etapa */
 .flow-body strong {
-  color: var(--brand-dark); /* Títulos agora usam o Azul Oficial */
+  color: var(--brand-dark); 
   font-weight: 700;
   font-size: 14px;
   margin-bottom: 2px;
 }
 
-/* O contêiner da linha vertical */
 .flow-connector {
   width: 32px;
   display: flex;
@@ -124,22 +108,18 @@ body {
   flex-shrink: 0;
 }
 
-/* A Linha Vertical que conecta as etapas */
+
 .flow-line {
   width: 2px;
   height: 100%;
   background-color: var(--border);
 }
 
-/* =========================================================
-   NOVAS CLASSES: CARDS DE AVISO
-   ========================================================= */
 
-/* Card Azul (Aviso / Info) - Reestilizado com o Azul da Marca */
 .card-aviso-azul {
-  background-color: rgba(20, 20, 52, 0.03); /* Fundo super leve do Azul */
+  background-color: rgba(20, 20, 52, 0.03); 
   border: 1px solid rgba(20, 20, 52, 0.15);
-  border-left: 4px solid var(--brand-dark); /* Faixa lateral Azul Oficial */
+  border-left: 4px solid var(--brand-dark);
   padding: 16px;
   border-radius: 6px;
   margin-top: 16px;
@@ -154,11 +134,10 @@ body {
   margin-bottom: 4px;
 }
 
-/* Card Laranja (Ponto Crítico / Warning) - Reestilizado com o Marrom da Marca */
 .card-aviso-laranja {
-  background-color: var(--primary-dim); /* Fundo super leve do Marrom */
+  background-color: var(--primary-dim); 
   border: 1px solid var(--primary-border);
-  border-left: 4px solid var(--primary); /* Faixa lateral Marrom Oficial */
+  border-left: 4px solid var(--primary);
   padding: 16px;
   border-radius: 6px;
   margin-top: 16px;

@@ -13,11 +13,9 @@ export default function EditableResponsibilities() {
   const [data, setData] = useState<Record<string, {id: string, text: string}[]>>({ c: [], d: [], y: [] });
   const [initialLoading, setInitialLoading] = useState(true);
   
-  // Estados para Adicionar
   const [addingTo, setAddingTo] = useState<string | null>(null);
   const [newText, setNewText] = useState("");
   
-  // Estados para Editar
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
 
@@ -28,18 +26,16 @@ export default function EditableResponsibilities() {
   const loadData = async () => {
     const res = await getResponsibilities();
     setData(res);
-    setInitialLoading(false); // Só usamos o loading na primeira vez que a página abre
+    setInitialLoading(false); 
   };
 
   const handleAdd = async (roleKey: string) => {
     if (!newText.trim()) return;
     const textToSave = newText;
     
-    // UI Otimista: Limpa o input na hora sem piscar a tela
     setNewText("");
     setAddingTo(null);
     
-    // Salva no banco silenciosamente
     await addResponsibility(roleKey, textToSave);
     await loadData();
   };
@@ -50,7 +46,6 @@ export default function EditableResponsibilities() {
       return;
     }
     
-    // UI Otimista: Fecha o input e atualiza o texto na tela IMEDIATAMENTE
     setEditingId(null);
     setData(prev => {
       const newData = { ...prev };
@@ -61,14 +56,12 @@ export default function EditableResponsibilities() {
       return newData;
     });
 
-    // Envia a requisição para o banco de dados em segundo plano
     await updateResponsibility(id, textToSave);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Remover esta responsabilidade?")) return;
     
-    // UI Otimista: Remove da tela imediatamente
     setData(prev => {
       const newData = { ...prev };
       Object.keys(newData).forEach(key => {
@@ -77,11 +70,9 @@ export default function EditableResponsibilities() {
       return newData;
     });
 
-    // Deleta no banco silenciosamente
     await deleteResponsibility(id);
   };
 
-  // Loader apenas na montagem inicial
   if (initialLoading) return <div className="p-4 text-center text-[var(--text-3)] text-xs font-bold uppercase tracking-widest">Carregando dados...</div>;
 
   return (
@@ -90,8 +81,7 @@ export default function EditableResponsibilities() {
       
       {Object.entries(PROFILES).map(([key, profile]) => (
         <div key={key} className="bg-white border border-[var(--border)] rounded-lg p-4 shadow-sm">
-          
-          {/* Cabeçalho do Perfil */}
+    
           <div className="flex items-center gap-4 mb-6">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${profile.bdgColor}`}>
               {profile.init}
@@ -107,7 +97,6 @@ export default function EditableResponsibilities() {
             </div>
           </div>
 
-          {/* Lista de Responsabilidades */}
           <div className="flex flex-col gap-2 mb-4">
             {data[key]?.map((item) => (
               <div key={item.id} className="flex items-center justify-between group py-1 min-h-[32px]">
@@ -124,7 +113,7 @@ export default function EditableResponsibilities() {
                       onBlur={() => handleUpdate(item.id, editingText)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          e.preventDefault(); // Evita conflitos de evento
+                          e.preventDefault(); 
                           handleUpdate(item.id, editingText);
                         }
                       }}
@@ -150,7 +139,6 @@ export default function EditableResponsibilities() {
             ))}
           </div>
 
-          {/* Adicionar Novo */}
           {addingTo === key ? (
             <div className="flex gap-2 items-center border border-[var(--border)] rounded p-1 pl-3 bg-[var(--surface-2)] animate-in fade-in duration-200">
               <input 

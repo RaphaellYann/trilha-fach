@@ -11,7 +11,7 @@ export default function EvidenceView({ taskId }: { taskId: string }) {
     const docs = await getTaskEvidences(taskId);
     
     if (docs.length > 0) {
-      // Abre a evidência mais recente em uma nova aba
+
       window.open(docs[0].fileUrl, "_blank");
     } else {
       alert("Arquivo não encontrado.");
@@ -22,7 +22,7 @@ export default function EvidenceView({ taskId }: { taskId: string }) {
   return (
     <button
       onClick={(e) => {
-        e.stopPropagation(); // REGRA SÊNIOR: Impede de marcar o check da tarefa
+        e.stopPropagation(); 
         handleView();
       }}
       disabled={loading}

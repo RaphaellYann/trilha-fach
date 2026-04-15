@@ -32,9 +32,9 @@ model TaskProgress {
 
 model TaskEvidence {
   id        String   @id @default(cuid())
-  taskId    String   // Ex: '1-1'
-  fileUrl   String   // Link do arquivo
-  fileName  String   // Nome original do arquivo
+  taskId    String   
+  fileUrl   String   
+  fileName  String  
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
@@ -42,8 +42,8 @@ model TaskEvidence {
 
 model AuditLog {
   id        String   @id @default(cuid())
-  taskId    String   // ID da tarefa (ex: "1-0")
-  action    String   // "CHECK" ou "UNCHECK"
+  taskId    String  
+  action    String   
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())

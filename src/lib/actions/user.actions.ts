@@ -8,7 +8,7 @@ import { hashPassword } from "../password";
 export async function getUsers() {
   try {
     const session = await auth();
-    // Ajuste de tipo aqui
+   
     if (!(session?.user as any)?.isAdmin) return [];
 
     return await prisma.user.findMany({

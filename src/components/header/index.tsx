@@ -17,11 +17,8 @@ export function Header() {
 
   return (
     <header className="w-full shadow-md">
-      {/* Topo Escuro (Branding e Gestão) */}
       <div className="bg-[#141434] text-white py-3 px-4 border-b border-white/5">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          
-          {/* Logo Clicável */}
           <Link 
             href="/trilha" 
             className="flex flex-col items-center md:items-start gap-1 group transition-all"
@@ -40,7 +37,6 @@ export function Header() {
             </p>
           </Link>
 
-          {/* Área de Sessão / Usuário */}
           <div className="flex items-center gap-6 border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
             <div className="flex items-center gap-4 text-center md:text-right">
               
@@ -81,7 +77,6 @@ export function Header() {
                     )}
                   </div>
 
-                  {/* Botão de Sair Estilizado */}
                   <button 
                     onClick={() => signOut({ callbackUrl: "/login" })}
                     className="flex items-center gap-2 px-3 py-1.5 border border-white/20 rounded-md bg-white/5 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all text-[10px] font-black uppercase tracking-widest group"
@@ -91,7 +86,6 @@ export function Header() {
                   </button>
                 </div>
               ) : (
-                /* ESTADO: DESLOGADO */
                 <Link 
                   href="/login" 
                   className="bg-[var(--primary)] text-white px-5 py-2 rounded font-black text-[10px] uppercase tracking-widest hover:brightness-110 transition-all shadow-lg"
@@ -106,7 +100,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* Navegação Principal */}
       <nav className="bg-white border-b-2 border-[var(--primary)] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 flex gap-2 md:gap-8 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {

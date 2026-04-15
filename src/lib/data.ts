@@ -1,8 +1,6 @@
 export const WHO_MAP = { c: 'wc', d: 'wd', y: 'wy', eq: 'weq' };
 export const WHO_LBL = { c: 'Carmen', d: 'Daiane', y: 'Yuri', eq: 'Equipe' };
 
-// A função generateFluxoHTML transformada em string estática para o detailsHtml
-// A função generateFluxoHTML transformada em string estática para o detailsHtml
 const fluxoHTML = `
   <div class="section" id="s2">
     <p class="section-label">Fluxo do pedido</p>

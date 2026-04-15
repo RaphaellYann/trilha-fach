@@ -4,9 +4,6 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
-/**
- * Registra uma nova evidência no banco e gera log de auditoria
- */
 export async function addEvidence(taskId: string, fileUrl: string, fileName: string) {
   try {
     const session = await auth();
@@ -21,7 +18,7 @@ export async function addEvidence(taskId: string, fileUrl: string, fileName: str
       }
     });
 
-    // Registra na auditoria que uma evidência foi anexada
+
     await prisma.auditLog.create({
       data: {
         taskId,
@@ -38,16 +35,13 @@ export async function addEvidence(taskId: string, fileUrl: string, fileName: str
   }
 }
 
-/**
- * Busca todas as evidências de uma tarefa específica
- */
 export async function getTaskEvidences(taskId: string) {
   try {
     return await prisma.taskEvidence.findMany({
       where: { taskId },
       orderBy: { createdAt: 'desc' },
       include: {
-        user: { select: { name: true } } // Traz o nome de quem anexou
+        user: { select: { name: true } } 
       }
     });
   } catch (error) {
@@ -56,11 +50,6 @@ export async function getTaskEvidences(taskId: string) {
   }
 }
 
-/**
- * Retorna um mapa de status: { "1-1": true, "2-0": true }
- * Essencial para o "olhinho" ou "clipe" saberem se brilham sem 
- * precisar fazer uma query para cada linha da tabela (performance).
- */
 export async function getEvidencesStatus() {
   try {
     const evidences = await prisma.taskEvidence.findMany({
